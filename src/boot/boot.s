@@ -4,8 +4,10 @@
 .text                   #executable code location
 .globl _start;
 _start:                 #code entry point
-    pushw DATA_SEG
+    
+    pushw CODE_SEG
     call print_hex
+    
     movb $0x0e, %ah
     movb $0x45, %al
     int $0x10
@@ -18,7 +20,7 @@ _start:                 #code entry point
     
     movb %dl, BOOT_DRIVE
 
-    movw $0xC000, %bp
+    movw $0x9000, %bp
     movw %bp, %sp
      
     pushw $0x9000
@@ -27,7 +29,7 @@ _start:                 #code entry point
     # call disk_load
 
     pushw $hello_msg
-    call print_str
+    # call print_str
 
     call switch_to_pm
 
@@ -50,6 +52,7 @@ _start:                 #code entry point
 BEGIN_PM:
     pushl $new_msg
     call print_str32
+    jmp hang
 
 hello_msg:
         .asciz "Hello There! General Kenobi!!!"
@@ -57,7 +60,7 @@ BOOT_DRIVE:
     .byte 0
 
 new_msg:
-    .asciz "Hello There! General Kenobi!!!\n"
+    .asciz "There's a whole 32 bit world out there"
 
 # Don't change anything below this
 hang:

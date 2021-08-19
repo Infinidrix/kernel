@@ -3,7 +3,7 @@
 VIDEO_MEMORY:
     .4byte 0xb8000
 WHITE_ON_BLACK:
-    .byte 0x0f
+    .byte 0x0a
 
 print_str32:
     pushl %ebp
