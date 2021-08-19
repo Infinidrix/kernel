@@ -7,7 +7,7 @@ _start:                 #code entry point
     
     movb %dl, BOOT_DRIVE
 
-    movw $0x9000, %bp
+    movw $0x9000, %bp # hard coding all constants because of issue trying to save global constants
     movw %bp, %sp
 
     pushw $hello_msg
@@ -25,23 +25,15 @@ _start:                 #code entry point
 .include "src/boot/utils-16/gdt.s"
 .include "src/boot/utils-16/switch_to_pm.s"
 .include "src/boot/utils-32/print_str32.s"
+.include "src/kernel/entry.s"
 
-.code16
-load_kernel:
-    pushw %bp
-    movw %sp, %bp
-    pushw $0x1000
-    pushw BOOT_DRIVE
-    pushw $0x15
-    call disk_load
-    leave
-    ret
+
 
 .code32
 BEGIN_PM:
     pushl $new_msg
     call print_str32
-    call 0x1000
+    call 0x1000 # Kernel loading address
     jmp hang
 
 hello_msg:

@@ -4,7 +4,7 @@ build/os-image: build/boot/boot.bin build/kernel/kernel.bin
 build/boot/boot.bin: build/boot/boot.o
 	ld -Ttext 0x7c00 --oformat binary -o build/boot/boot.bin build/boot/boot.o
 
-build/boot/boot.o: src/boot/*.s src/boot/*/*.s
+build/boot/boot.o: src/*/*.s src/boot/*/*.s
 	as src/boot/boot.s -o build/boot/boot.o
 
 build/kernel/kernel.bin: build/kernel/kernel.o
