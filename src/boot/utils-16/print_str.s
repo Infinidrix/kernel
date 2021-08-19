@@ -4,9 +4,8 @@ print_str:
 
     movb $0x0e, %ah
     movw 4(%bp), %bx
-
   loop_start:
-    mov (%bx), %al
+    movb (%bx), %al
     cmp $0x0, %al
     je end
     int $0x10
