@@ -4,6 +4,8 @@
 .text                   #executable code location
 .globl _start;
 _start:                 #code entry point
+    pushw DATA_SEG
+    call print_hex
     movb $0x0e, %ah
     movb $0x45, %al
     int $0x10
@@ -23,8 +25,6 @@ _start:                 #code entry point
     pushw BOOT_DRIVE
     pushw $0x05
     # call disk_load
-    # pushw DATA_SEG
-    # call print_hex
 
     pushw $hello_msg
     call print_str
