@@ -3,8 +3,7 @@ disk_load:
     movw %sp, %bp
 
     movb 4(%bp), %dh
-    movb 6(%bp), %dl
-    movw 8(%bp), %bx
+    movw 6(%bp), %bx
     pushw %dx
     
     movb $0x02, %ah

@@ -4,7 +4,6 @@ load_kernel:
     movw %sp, %bp
 
     pushw $0x1000 # Issue with using a constant so hardcoded 
-    pushw BOOT_DRIVE
     pushw $0x15
     call disk_load
     leave
