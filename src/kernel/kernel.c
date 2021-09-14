@@ -2,5 +2,7 @@
 
 void main(){
     clear_screen();
-    print("X Yeah this works");
+    for (int i = 0; i < 122; i++){
+        print("X Yeah this works");
+    }
 }
