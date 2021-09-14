@@ -1,3 +1,9 @@
+
+SOURCE := $(wildcard src/*/*.c)
+HEADERS := $(wildcard src/*/*.h)
+
+OBJ := $(patsubst src%c, build%o, $(SOURCE))
+
 build/os-image: build/boot/boot_trimmed.bin build/kernel/kernel.bin
 	cat build/boot/boot.bin build/kernel/kernel.bin > build/os-image
 
@@ -13,16 +19,11 @@ build/boot/boot.o: src/*/*.s src/boot/*/*.s
 build/kernel/kernel_entry.o: src/kernel/kernel_entry.s
 	as --32 $^ -o $@
 
-build/kernel/kernel.bin: build/kernel/kernel_entry.o build/kernel/kernel.o build/kernel/low_level.o build/drivers/screen.o
+build/kernel/kernel.bin: build/kernel/kernel_entry.o $(OBJ)
 	ld -o $@ -Ttext 0x1000 $^ --oformat binary -m elf_i386
 
-build/kernel/kernel.o: src/kernel/kernel.c
+$(OBJ) : build%o : src%c
 	gcc -ffreestanding -c -m32 -fno-pie $^ -o $@
 
-build/kernel/low_level.o: src/kernel/low_level.c
-	gcc -ffreestanding -c -m32 -fno-pie $^ -o $@
-
-build/drivers/screen.o: src/drivers/screen.c
-	gcc -ffreestanding -c -m32 -fno-pie $^ -o $@
 boot: build/os-image
 	qemu-system-x86_64 -drive format=raw,file=build/os-image,index=0,if=floppy
