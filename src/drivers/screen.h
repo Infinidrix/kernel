@@ -1,3 +1,6 @@
+#define WHITE_ON_BLACK 0x0f
+#define GREEN_ON_BLACK 0x0a
+
 void print_char(char character, int col, int row, char attribute_byte);
 
 int get_screen_offset(int col, int row);
@@ -9,6 +12,12 @@ int get_cursor();
 void print_at(char* message, int col, int row);
 
 void print(char *message);
+
+void print_attr(char *message, char attr);
+
+void print_int_attr(void *number, char attr);
+
+void print_at_attr(char* message, int col, int row, char attr);
 
 void clear_screen();
 

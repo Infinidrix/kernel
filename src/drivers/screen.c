@@ -2,8 +2,6 @@
 #define MAX_ROWS 25
 #define MAX_COLS 80
 
-#define WHITE_ON_BLACK 0x0f
-#define GREEN_ON_BLACK 0x0a
 #define REG_SCREEN_CTRL 0X3d4
 #define REG_SCREEN_DATA 0x3d5
 
@@ -61,17 +59,30 @@ int get_cursor(){
 }
 
 void print_at(char* message, int col, int row) {
+    print_at_attr(message, col, row, WHITE_ON_BLACK);
+}
+
+void print(char *message) {
+    print_at(message, -1, -1);
+}
+
+void print_attr(char *message, char attr){
+    print_at_attr(message, -1, -1, attr);
+}
+
+void print_int_attr(void *number, char attr){
+    char result[10];
+    print_at_attr(int_to_string(result, (int) number), -1, -1, attr);
+}
+
+void print_at_attr(char* message, int col, int row, char attr) {
     if (col >= 0 && row >= 0){
         set_cursor(get_screen_offset(col, row));
     }
     int i = 0;
     while (message[i] != 0){
-        print_char(message[i++], col, row, WHITE_ON_BLACK);
+        print_char(message[i++], col, row, attr);
     }
-}
-
-void print(char *message) {
-    print_at(message, -1, -1);
 }
 
 void clear_screen() {
