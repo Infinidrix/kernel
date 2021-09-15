@@ -20,10 +20,15 @@ build/kernel/kernel_entry.o: src/kernel/kernel_entry.s
 	as --32 $^ -o $@
 
 build/kernel/kernel.bin: build/kernel/kernel_entry.o $(OBJ)
-	ld -o $@ -Ttext 0x1000 $^ --oformat binary -m elf_i386
+	ld -o $@.temp -Ttext 0x1000 $^ --oformat binary -m elf_i386
+	head -c 5120 $@.temp > $@
+	rm $@.temp
 
-$(OBJ) : build%o : src%c
-	gcc -ffreestanding -c -m32 -fno-pie $^ -o $@
+$(OBJ) : build%o : src%c $(HEADERS)
+	gcc -ffreestanding -c -m32 -fno-pie $< -o $@
 
 boot: build/os-image
 	qemu-system-x86_64 -drive format=raw,file=build/os-image,index=0,if=floppy
+
+clean:
+	rm build/boot/* build/drivers/* build/kernel/* build/os-image
