@@ -5,7 +5,7 @@ HEADERS := $(wildcard src/*/*.h)
 OBJ := $(patsubst src%c, build%o, $(SOURCE))
 
 build/os-image: build/boot/boot_trimmed.bin build/kernel/kernel.bin
-	cat build/boot/boot.bin build/kernel/kernel.bin > build/os-image
+	cat build/boot/boot.bin build/kernel/kernel.bin build/kernel/kernel.o > build/os-image
 
 build/boot/boot_trimmed.bin: build/boot/boot.bin
 	head -c 512 build/boot/boot.bin > build/boot/boot_trimmed.bin

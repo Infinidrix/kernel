@@ -72,7 +72,12 @@ void print_attr(char *message, char attr){
 
 void print_int_attr(void *number, char attr){
     char result[10];
-    print_at_attr(int_to_string(result, (int) number), -1, -1, attr);
+    print_at_attr(int_to_string(result, (unsigned int) number), -1, -1, attr);
+}
+
+void print_short_attr(void *number, char attr){
+    char result[10];
+    print_at_attr(short_to_string(result, ((unsigned short) (number && 0xffff))), -1, -1, attr);
 }
 
 void print_at_attr(char* message, int col, int row, char attr) {

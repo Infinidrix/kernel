@@ -3,7 +3,8 @@
 #define KERNEL_UTILS
 
 void memory_copy(char *source, char *dest, int no_bytes);
-char *int_to_string(char * result, int number);
+char *int_to_string(char * result, unsigned int number);
+char *short_to_string(char * result, unsigned short number);
 void reverse_string(char * string, int size);
 /**
  * Some typedefs to make life easier...

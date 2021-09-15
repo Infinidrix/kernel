@@ -1,3 +1,6 @@
+#ifndef SCREEN_DEF
+#define SCREEN_DEF
+
 #define WHITE_ON_BLACK 0x0f
 #define GREEN_ON_BLACK 0x0a
 
@@ -17,8 +20,11 @@ void print_attr(char *message, char attr);
 
 void print_int_attr(void *number, char attr);
 
+void print_short_attr(void *number, char attr);
+
 void print_at_attr(char* message, int col, int row, char attr);
 
 void clear_screen();
 
 int handle_scrolling(int cursor_offset);
+#endif
