@@ -11,6 +11,23 @@ short is_elf(Elf32_Ehdr *header){
     );
 }
 
+void print_program(Elf32_Phdr *program, int offset){
+
+    print(" Of: ");
+    print_int_attr(offset, GREEN_ON_BLACK);
+    print(" File Size: ");
+    print_int_attr(program->p_filesz, GREEN_ON_BLACK);
+    print(" Flags: ");
+    print_int_attr(program->p_flags, GREEN_ON_BLACK);
+    print(" Offset: ");
+    print_int_attr(program->p_offset, GREEN_ON_BLACK);
+    print(" Type: ");
+    print_int_attr(program->p_type, GREEN_ON_BLACK);
+    print(" V Addr: ");
+    print_int_attr(program->p_vaddr, GREEN_ON_BLACK);
+    print(" \n");
+}
+
 void print_section(Elf32_Shdr *section, int offset){
     print(" Of: ");
     print_int_attr(offset, GREEN_ON_BLACK);
@@ -36,11 +53,10 @@ void loader(char *filename){
         return;
     } 
     int offset = header->e_phoff;
-    print_int_attr((void *)header->e_shoff, GREEN_ON_BLACK);
-    print(" ");
     // print_int_attr((void *)header->e_phoff, WHITE_ON_BLACK);
     for (int i = 0; i < header->e_phnum; i++){
-        print("Program ");
+        Elf32_Phdr *program_header = (Elf32_Phdr *)(program + offset);
+        print_program(program_header, offset);
         offset += header->e_phentsize;
     }
     // TODO: Fix print int
