@@ -6,6 +6,7 @@ void memory_copy(char *source, char *dest, int no_bytes);
 char *int_to_string(char * result, unsigned int number);
 char *short_to_string(char * result, unsigned short number);
 void reverse_string(char * string, int size);
+void memset(char *loc, char set_bit, int no_bytes);
 /**
  * Some typedefs to make life easier...
  */  

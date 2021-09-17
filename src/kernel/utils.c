@@ -5,7 +5,16 @@ void memory_copy(char *source, char *dest, int no_bytes) {
     for (i = 0; i < no_bytes; i++){
         *(dest + i) = *(source + i);
     }
+    return;
 }
+
+void memset(char *loc, char set_bit, int no_bytes){
+    for (int i = 0; i < no_bytes; i++){
+        *(loc + i) = set_bit;
+    }
+    return;
+}
+
 char *int_to_string(char *result, unsigned int number){
     if (number == 0){
         result[0] = '0';

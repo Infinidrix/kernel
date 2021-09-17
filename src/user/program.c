@@ -22,9 +22,10 @@ void * action2(void * args){
     print_int_syscall(++x, WHITE_ON_BLACK);
     // mutex_unlock(&mutex);    
 }
-int main(){
+int main(){ 
     // Pid_t pid = getpid();    
-    print_syscall("** main thread. pid : ",WHITE_ON_BLACK);   
+    print_int_syscall(x, WHITE_ON_BLACK);
+    print_syscall(" ** main thread. pid : ",WHITE_ON_BLACK);   
     // print_int_syscall(pid, WHITE_ON_BLACK);   
     // mutex_init(&mutex);
     // thread_t thread,t2,t3,t4,t5,t6,t7;
@@ -34,6 +35,6 @@ int main(){
     // pthread_create(&t4, action2 , 0);
     // pthread_create(&t5, action2 , 0);
     // pthread_create(&t6, action2 , 0);
-    
+     
     return 0;
 }

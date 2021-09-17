@@ -70,12 +70,12 @@ void print_attr(char *message, char attr){
     print_at_attr(message, -1, -1, attr);
 }
 
-void print_int_attr(void *number, char attr){
+void print_int_attr(int number, char attr){
     char result[10];
     print_at_attr(int_to_string(result, (unsigned int) number), -1, -1, attr);
 }
 
-void print_short_attr(void *number, char attr){
+void print_short_attr(short number, char attr){
     char result[10];
     print_at_attr(short_to_string(result, ((unsigned short) (number && 0xffff))), -1, -1, attr);
 }

@@ -18,9 +18,9 @@ void print(char *message);
 
 void print_attr(char *message, char attr);
 
-void print_int_attr(void *number, char attr);
+void print_int_attr(int number, char attr);
 
-void print_short_attr(void *number, char attr);
+void print_short_attr(short number, char attr);
 
 void print_at_attr(char* message, int col, int row, char attr);
 

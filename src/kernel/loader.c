@@ -1,6 +1,7 @@
 #include "loader.h"
 #include "elf.h"
 #include "../drivers/screen.h"
+#include "../kernel/utils.h"
 
 short is_elf(Elf32_Ehdr *header){
     char *identifier = header->e_ident;
@@ -53,21 +54,29 @@ void loader(char *filename){
         return;
     } 
     int offset = header->e_phoff;
-    // print_int_attr((void *)header->e_phoff, WHITE_ON_BLACK);
+    int start;
     for (int i = 0; i < header->e_phnum; i++){
         Elf32_Phdr *program_header = (Elf32_Phdr *)(program + offset);
-        print_program(program_header, offset);
+        if (program_header->p_type == PT_LOAD){
+            memset((char *)(program_header->p_vaddr), (char) 0, program_header->p_memsz);
+            memory_copy((char *)(program + program_header->p_offset), (char *)(program_header->p_vaddr), program_header->p_filesz);
+            print("\n");
+            // TODO: Fix this hard coding
+            if (program_header->p_flags == 5){
+                start = program_header->p_vaddr;
+            }
+        }
         offset += header->e_phentsize;
     }
-    // TODO: Fix print int
-    offset = header->e_shoff;
-    
-    for (int i = 0; i < header->e_shnum; i++){
-        // print("Section ");
-        Elf32_Shdr *section_header = (Elf32_Shdr *) (program + offset);
-        // print_int_attr((void *) section_header->sh_flags, WHITE_ON_BLACK);
-        print_section(section_header, offset);
-        offset += header->e_shentsize;
-    }
+    print("Starting User Program\n");
+    // TODO: Choose one of the two as way to jump to start
+    ((void *(*)()) start)();
+    /*
+    __asm__("call %%eax"
+        :
+        : "a" (start)
+    );
+    */
+    print("\nFinished User Program");
     
 }
