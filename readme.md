@@ -14,3 +14,6 @@ Just wanted to point out that shortcoming of the code.
 Best regards,
 Biruk Solomon
 ATR/5471/11
+
+### Corners cut so far
+- Loaded extra sectors from disk

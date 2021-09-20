@@ -19,12 +19,8 @@ build/boot/boot.o: src/*/*.s src/boot/*/*.s
 	as --32 src/boot/boot.s -o build/boot/boot.o
 
 # USER BUILD
-build/user/user: build/user/user_entry.o $(USER_OBJ)
+build/user/user: $(USER_OBJ)
 	ld --Ttext 0x07048000 -m elf_i386 --oformat elf32-i386 -o $@ $^
-
-
-build/user/user_entry.o: src/user/user_entry.s
-	as --32 $^ -o $@
 
 build/kernel/kernel_entry.o: src/kernel/kernel_entry.s
 	as --32 $^ -o $@
@@ -43,4 +39,4 @@ boot: build/os-image
 	qemu-system-x86_64 -drive format=raw,file=build/os-image,index=0,if=floppy
 
 clean:
-	rm build/boot/* build/drivers/* build/kernel/* build/os-image
+	rm build/boot/* build/drivers/* build/kernel/* build/os-image build/user/* build/stdlib/*

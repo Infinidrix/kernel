@@ -7,6 +7,8 @@ char *int_to_string(char * result, unsigned int number);
 char *short_to_string(char * result, unsigned short number);
 void reverse_string(char * string, int size);
 void memset(char *loc, char set_bit, int no_bytes);
+int strcmp(char *str1, char *str2);
+int strlen(char *str);
 /**
  * Some typedefs to make life easier...
  */  

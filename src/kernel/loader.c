@@ -11,7 +11,7 @@ short is_elf(Elf32_Ehdr *header){
             identifier[3] == 'F'
     );
 }
-
+// Print program headers for debugging purposes
 void print_program(Elf32_Phdr *program, int offset){
 
     print(" Of: ");
@@ -28,7 +28,7 @@ void print_program(Elf32_Phdr *program, int offset){
     print_int_attr(program->p_vaddr, GREEN_ON_BLACK);
     print(" \n");
 }
-
+// Print section headers for debugging purposes
 void print_section(Elf32_Shdr *section, int offset){
     print(" Of: ");
     print_int_attr(offset, GREEN_ON_BLACK);
@@ -43,6 +43,48 @@ void print_section(Elf32_Shdr *section, int offset){
     print(" Section Size: ");
     print_int_attr(section->sh_size, GREEN_ON_BLACK);
     print(" \n");
+}
+
+
+void print_symbol_entry(Elf32_Sym *entry){
+    print("Name Idx: ");
+    print_int_attr(entry->st_name, GREEN_ON_BLACK);
+    print(" Value: ");
+    print_int_attr(entry->st_value, GREEN_ON_BLACK);
+    print(" Size: ");
+    print_int_attr(entry->st_size, GREEN_ON_BLACK);
+}
+
+int get_main_index(Elf32_Shdr *strtab, char * program){
+    int size, offset, start, index;
+    index = 0;
+    size = strtab->sh_size - 1;
+    offset = program + strtab->sh_offset + 1;
+    start = offset;
+    while (offset < start + size ){
+        if (strcmp((char *)(offset), "main")){
+            return offset - start + 1;
+        }
+        index++;
+        offset += strlen((char *)(offset)) + 1;
+    }
+    print("Why like this?");
+    return 0;
+} 
+
+int find_index(Elf32_Shdr *symtab, int main_index, char * program){
+    int size = symtab->sh_size;
+    int ent_size = symtab->sh_entsize;
+    int offset = (char *) (program + symtab->sh_offset);
+    for (int i = 0; i < size; i += ent_size){
+        Elf32_Sym *symbol_ent = (Elf32_Sym *)(offset + i);
+        if (symbol_ent->st_name == main_index){
+            return symbol_ent->st_value;
+        }
+    }
+    print("Why This?");
+    return 0;
+
 }
 
 // File name not useful here
@@ -60,17 +102,27 @@ void loader(char *filename){
         if (program_header->p_type == PT_LOAD){
             memset((char *)(program_header->p_vaddr), (char) 0, program_header->p_memsz);
             memory_copy((char *)(program + program_header->p_offset), (char *)(program_header->p_vaddr), program_header->p_filesz);
-            print("\n");
-            // TODO: Fix this hard coding
-            if (program_header->p_flags == 5){
-                start = program_header->p_vaddr;
-            }
         }
         offset += header->e_phentsize;
     }
+
+    Elf32_Shdr *symbol_table, *string_table;
+    string_table = (void *)'\0';
+    offset = header->e_shoff;
+    for (int i = 0; i < header->e_shnum; i++){
+        Elf32_Shdr *section_header = (Elf32_Shdr *) (program + offset);
+        if (section_header->sh_type == SHT_SYMTAB){
+            symbol_table = section_header;
+        } else if (section_header->sh_type == SHT_STRTAB && string_table == (void *)'\0'){
+            string_table = section_header;
+        }
+        offset += header->e_shentsize; 
+    }
+    int main_index = get_main_index(string_table, program);
+    start = find_index(symbol_table, main_index, program);
     print("Starting User Program\n");
     // TODO: Choose one of the two as way to jump to start
-    ((void *(*)()) start)();
+    ((int *(*)()) start)();
     /*
     __asm__("call %%eax"
         :
