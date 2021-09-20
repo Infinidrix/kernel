@@ -59,7 +59,7 @@ int get_main_index(Elf32_Shdr *strtab, char * program){
     int size, offset, start, index;
     index = 0;
     size = strtab->sh_size - 1;
-    offset = program + strtab->sh_offset + 1;
+    offset = ((int) program) + strtab->sh_offset + 1;
     start = offset;
     while (offset < start + size ){
         if (strcmp((char *)(offset), "main")){
@@ -75,7 +75,7 @@ int get_main_index(Elf32_Shdr *strtab, char * program){
 int find_index(Elf32_Shdr *symtab, int main_index, char * program){
     int size = symtab->sh_size;
     int ent_size = symtab->sh_entsize;
-    int offset = (char *) (program + symtab->sh_offset);
+    int offset = (int) (program + symtab->sh_offset);
     for (int i = 0; i < size; i += ent_size){
         Elf32_Sym *symbol_ent = (Elf32_Sym *)(offset + i);
         if (symbol_ent->st_name == main_index){
