@@ -30,7 +30,7 @@ void pthread_exit(){
         int index = (curr_pcb_index + i) % PCB_ARR_SIZE;
         if (occupied[index] == 1 && arr[index].process_state == Running){
             arr[index].process_state = Terminated;
-            occupied[index] = 0;
+            occupied[index] = 1;
             break;
         }
     }
@@ -49,12 +49,14 @@ void pthread_exit(){
     }
     
     if (found_next == 1){
-        print("Found a program wow and found it at\n");
-        print_int_attr(curr_pcb_index, GREEN_ON_BLACK);
+        // print("Found a program wow and found it at\n");
+        // print_int_attr(curr_pcb_index, GREEN_ON_BLACK);
         // Switch to new program
         
         asm("movl %%eax, %%esp;"
             "movl %%ebx, %%ebp;"
+            "leave;"
+            "ret;"
             : 
             : "a" (arr[curr_pcb_index].esp), "b" (arr[curr_pcb_index].ebp));
         return;
@@ -67,7 +69,6 @@ void pthread_exit(){
             "ret;"
             : 
             : "a" (kernel_esp), "b" (kernel_ebp));
-        print("Here we'll never get");
         return;
     }
 
@@ -77,10 +78,19 @@ void pthread_exit(){
  * Create a new thread.
  */
 void pthread_create(thread_t *thread, thread_action action,void * args){
+    int return_addr, ebp, esp;
+
+    asm("movl 4(%%ebp), %%eax;"
+        "movl %%ebp, %%ebx;"
+        "movl %%esp, %%ecx;"
+        : "=a" (return_addr), "=b" (ebp), "=c" (esp)
+        : );
     for(int i=0; i < 10; i++){
         int index = (curr_pcb_index + i) % PCB_ARR_SIZE;
         if (occupied[index] == 1 && arr[index].process_state == Running){
             arr[index].process_state = Ready;
+            arr[index].ebp = ebp;
+            arr[index].esp = esp;
             break;
         }
     }
@@ -94,9 +104,9 @@ void pthread_create(thread_t *thread, thread_action action,void * args){
             break;
         }
     }
-    print("Found a spot at ");
-    print_int_attr(t_id, YELLOW_ON_BLUE);
-    print("\n");
+    // print("Found a spot at ");
+    // print_int_attr(t_id, YELLOW_ON_BLUE);
+    // print("\n");
     // edge case for debugging purposes
     if (t_id == -1){
         print("no more space for threads\n");
@@ -127,7 +137,7 @@ void pthread_create(thread_t *thread, thread_action action,void * args){
     // action((void *) 0);
 
     // the 'action' function returns the control  
-    print("\nWe've finished this thread\n");
+    // print("\nWe've finished this thread\n");
     pthread_exit();
 }
 
@@ -170,7 +180,7 @@ void pthread_yield(){
         int index = (curr_pcb_index + i) % PCB_ARR_SIZE;
         if (occupied[index] == 1 && arr[index].process_state == Running){
             arr[index].process_state = Ready;
-            thread_id_to_yield = i;
+            thread_id_to_yield = index;
             break;
         }
     }
@@ -192,6 +202,8 @@ void pthread_yield(){
     // Switch to new program
     asm("movl %%eax, %%esp;"
         "movl %%ebx, %%ebp;"
+        "leave;"
+        "ret;"
         : 
         : "a" (arr[curr_pcb_index].esp), "b" (arr[curr_pcb_index].ebp));
     return;

@@ -4,7 +4,7 @@ int x =0;
 Mutex_t mutex;
 void * action(void * args){
     Tid_t tid = gettid();
-    // pthread_yield();    
+    pthread_yield();    
     // mutex_lock(&mutex);
     print_syscall("** Thread Id : ", WHITE_ON_BLACK);
     print_int_syscall( tid, WHITE_ON_BLACK);
@@ -14,7 +14,7 @@ void * action(void * args){
 }
 void * action2(void * args){
     // mutex_lock(&mutex);
-    // pthread_yield();    
+    pthread_yield();    
     Tid_t tid = gettid();    
     print_syscall("** Thread Id : ", WHITE_ON_BLACK);
     print_int_syscall( tid, WHITE_ON_BLACK);
@@ -31,6 +31,7 @@ int main(){
     thread_t thread,t2,t3,t4,t5,t6,t7;
     pthread_create(&thread, action , 0);
     pthread_create(&t2, action , 0);
+
     pthread_create(&t3, action , 0);
     pthread_create(&t4, action2 , 0);
     pthread_create(&t5, action2 , 0);
