@@ -14,7 +14,7 @@ void main(){
     print("Loaded Kernel\n");
     // syscall_func = syscall_table[PRINT_INT_NO];
     // syscall_func((void *)2001,GREEN_ON_BLACK);
-    loader("");
+    // loader("");
 }
 
 
