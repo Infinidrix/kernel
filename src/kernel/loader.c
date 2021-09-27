@@ -121,7 +121,7 @@ void loader(char *filename){
     }
     int main_index = get_main_index(string_table, program);
     start = find_index(symbol_table, main_index, program);
-    print("Starting User Program\n");
+    print_attr("Starting User Program\n", GREEN_ON_BLACK);
     // TODO: Choose one of the two as way to jump to start
     thread_action action = (thread_action) start;
     // action((void *) 0);
@@ -133,6 +133,6 @@ void loader(char *filename){
         : "a" (start)
     );
     */
-    print("\nFinished User Program");
+    print_attr("\nFinished User Program", YELLOW_ON_BLUE);
     
 }

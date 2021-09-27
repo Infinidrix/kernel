@@ -49,8 +49,6 @@ void pthread_exit(){
     }
     
     if (found_next == 1){
-        // print("Found a program wow and found it at\n");
-        // print_int_attr(curr_pcb_index, GREEN_ON_BLACK);
         // Switch to new program
         
         asm("movl %%eax, %%esp;"
@@ -62,7 +60,7 @@ void pthread_exit(){
         return;
     } else {
         // Restore kernel stack
-        print("No other threads to schedule");
+        print_attr("\nNo other threads to schedule", GREEN_ON_BLACK);
         asm("movl %%eax, %%esp;"
             "movl %%ebx, %%ebp;"
             "leave;"
@@ -104,12 +102,9 @@ void pthread_create(thread_t *thread, thread_action action,void * args){
             break;
         }
     }
-    // print("Found a spot at ");
-    // print_int_attr(t_id, YELLOW_ON_BLUE);
-    // print("\n");
     // edge case for debugging purposes
     if (t_id == -1){
-        print("no more space for threads\n");
+        print_attr("no more space for threads\n", YELLOW_ON_BLUE);
     }
 
     // create the PCB( program counter block for the new thread)
@@ -133,11 +128,6 @@ void pthread_create(thread_t *thread, thread_action action,void * args){
         : 
         : "a" (new_thread.esp), "b" (new_thread.ebp), "c" ((int) action));
     // calling the function the theard suppose to do
-    // print("Updated stack!! \n");
-    // action((void *) 0);
-
-    // the 'action' function returns the control  
-    // print("\nWe've finished this thread\n");
     pthread_exit();
 }
 
@@ -190,10 +180,10 @@ void pthread_yield(){
     arr[thread_id_to_yield].ebp = ebp;
     arr[thread_id_to_yield].pc = return_addr;
 
-    for(int i=0; i < 10; i++){
-        int index = (curr_pcb_index + i) % PCB_ARR_SIZE;
+    for(int i=1; i < 11; i++){
+        int index = (thread_id_to_yield + i) % PCB_ARR_SIZE;
         if (occupied[index] == 1 && arr[index].process_state == Ready){
-            curr_pcb_index = (curr_pcb_index + i) % PCB_ARR_SIZE;
+            curr_pcb_index = (thread_id_to_yield + i) % PCB_ARR_SIZE;
             arr[curr_pcb_index].process_state = Running;
             break;
         }

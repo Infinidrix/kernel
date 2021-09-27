@@ -9,14 +9,9 @@ void create_syscall_table();
 void main(){ 
     clear_screen();
     create_syscall_table();
-    // Syscall_table_t syscall_table = (Syscall_table_t) SYSCALL_VECTOR;
-    // Syscall_t syscall_func = syscall_table[PRINTLN_NO];
-    // syscall_func("Coool  ", WHITE_ON_BLACK);
-    print("Loaded Kernel\n");
-    // syscall_func = syscall_table[PRINT_INT_NO];
-    // syscall_func((void *)2001,GREEN_ON_BLACK);
+    print_attr("Loaded Kernel\n", GREEN_ON_BLACK);
     loader("");
-    print("\nI guess I'm done");
+    print_attr("\nI guess I'm done... good bye", YELLOW_ON_BLUE);
 }
 
 
