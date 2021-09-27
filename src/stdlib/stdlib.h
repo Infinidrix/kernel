@@ -9,6 +9,8 @@
  * Some typedefs to make life easier...
  */
 typedef int thread_t;
+typedef int Mutex_t;
+typedef int Semaphore_t;
 
 typedef void * (*thread_action)(void *);
 typedef void * (*Syscall_t)(void * arg,...);
@@ -80,5 +82,17 @@ Pid_t getpid();
  * The yield function. Gives up control of cpu.
  */
 void pthread_yield();
+
+void mutex_init(Mutex_t * mutex);
+
+int mutex_lock(Mutex_t * mutex);
+
+int mutex_unlock(Mutex_t * mutex);
+
+void sem_init(Semaphore_t *sem, int value);
+
+int sem_wait(Semaphore_t *sem);
+
+int sem_post(Semaphore_t *sem);
 
 #endif
