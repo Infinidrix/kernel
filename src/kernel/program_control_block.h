@@ -1,5 +1,5 @@
 // states
-enum state {New, Ready, Running, Wait, Terminated};
+enum state {Ready, Running, Terminated};
 
 typedef struct {
     // process state
