@@ -21,3 +21,12 @@ typedef struct {
     int esp;
     int ebp;
 } PCB ;
+
+typedef int thread_t;
+typedef int Mutex_t;
+typedef int Semaphore_t;
+
+typedef void * (*thread_action)(void *);
+
+typedef int Tid_t;
+typedef int Pid_t;
