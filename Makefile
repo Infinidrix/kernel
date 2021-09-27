@@ -26,8 +26,9 @@ build/kernel/kernel_entry.o: src/kernel/kernel_entry.s
 	as --32 $^ -o $@
 
 build/kernel/kernel.bin: build/kernel/kernel_entry.o $(OBJ)
+	ld --Ttext 0x07048000 -m elf_i386 --oformat elf32-i386 -o build/kernel/kernel.test $^
 	ld -o $@.temp -Ttext 0x1000 $^ --oformat binary -m elf_i386
-	head -c 5120 $@.temp > $@
+	head -c 10000 $@.temp > $@
 	rm $@.temp
 
 $(OBJ) : build%o : src%c $(HEADERS)

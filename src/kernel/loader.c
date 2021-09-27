@@ -2,6 +2,7 @@
 #include "elf.h"
 #include "../drivers/screen.h"
 #include "../kernel/utils.h"
+#include "program_control_block.h"
 
 short is_elf(Elf32_Ehdr *header){
     char *identifier = header->e_ident;
@@ -122,7 +123,10 @@ void loader(char *filename){
     start = find_index(symbol_table, main_index, program);
     print("Starting User Program\n");
     // TODO: Choose one of the two as way to jump to start
-    ((int *(*)()) start)();
+    thread_action action = (thread_action) start;
+    // action((void *) 0);
+    pthread_init((thread_action) start);
+    // ((int *(*)()) start)();
     /*
     __asm__("call %%eax"
         :

@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "loader.h"
 #include "sync.h"
+#include "program_control_block.h"
 
 void create_syscall_table();
 
@@ -14,7 +15,8 @@ void main(){
     print("Loaded Kernel\n");
     // syscall_func = syscall_table[PRINT_INT_NO];
     // syscall_func((void *)2001,GREEN_ON_BLACK);
-    // loader("");
+    loader("");
+    print("\nI guess I'm done");
 }
 
 
@@ -29,4 +31,9 @@ void create_syscall_table() {
     sys_call_table[SEM_INIT_NO] = (Syscall_t) semaphore_init;
     sys_call_table[SEM_WAIT_NO] = (Syscall_t) semaphore_wait;
     sys_call_table[SEM_POST_NO] = (Syscall_t) semaphore_post;
+    sys_call_table[GET_PID_NO] = (Syscall_t) getpid;
+    sys_call_table[GET_TID_NO] = (Syscall_t) gettid;
+    sys_call_table[THREAD_EXIT_NO] = (Syscall_t) pthread_exit;
+    sys_call_table[THREAD_CREATE_NO] = (Syscall_t) pthread_create;
+    sys_call_table[THREAD_YIELD_NO] = (Syscall_t) pthread_yield;
 }

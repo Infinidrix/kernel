@@ -59,30 +59,5 @@ void print_syscall(char * str, char atrr);
  * Print an integer
  */
 void print_int_syscall(int num, char attr);
-/**
- * Terminates the current thread, and releases any resources
- * that might have been with this thead.
- */
-void pthread_exit();
-
-/**
- * Create a new thread.
- */
-void pthread_create(thread_t *thread, thread_action action,void * args);
-
-/**
- * Getting this thread's id
- */
-Tid_t gettid();
-
-/**
- * Getting the process id
- */
-Pid_t getpid();
-
-/**
- * The yield function. Gives up control of cpu.
- */
-void pthread_yield();
 
 #endif
